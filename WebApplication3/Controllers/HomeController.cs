@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DB.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -9,42 +10,44 @@ namespace WebApplication3.Controllers
 {
     public class HomeController : Controller
     {
-        MPOContext db = new MPOContext();
+        private MPOContext _db;
 
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,MPOContext context)
         {
             _logger = logger;
+            _db = context;
         }
-        [HttpGet]
+      [Route("Index")]
+      [HttpGet]
         public IActionResult Index()
         {
-            
-            return View();
+
+          return View();
         }
-       
+        [Route("Table")]
+        [HttpGet]
         public IActionResult Table()
         {
-            MPOContext db = new MPOContext();
-            return View(Tuple.Create(db.Departments.ToList(),db.Users.ToList()));
-        }
 
+            return View(Tuple.Create(_db.Departments.ToList(), _db.Users.ToList()));
+        }
+       [Route("Index")]
         [HttpPost]
         public IActionResult Index(ModelW mod)
         {
-            var d = db.Departments.Where(t=> t.Name == mod.DepartmentName).FirstOrDefault();
-           
-            if (db.Departments.Where(t => t.Name == mod.DepartmentName).FirstOrDefault() == null)
+            var d = _db.Departments.FirstOrDefault(t => t.Name == mod.DepartmentName);
+
+            if (_db.Departments.Where(t => t.Name == mod.DepartmentName).FirstOrDefault() == null)
             {
                 Department dep = new()
                 {
                     CompanyId = 1,
                     Name = mod.DepartmentName,
                 };
-                db.Add(dep);
-                db.SaveChanges();
-
+                _db.Add(dep);
+                _db.SaveChanges();
                 for (int i = 0; i < mod.Count(); i++)
                 {
                     User us = new()
@@ -56,9 +59,9 @@ namespace WebApplication3.Controllers
                         Position = mod.Position[i],
                         DepartmentId = Convert.ToInt32(dep.Id),
                     };
-                    db.Add(us);
+                    _db.Add(us);
                 }
-                db.SaveChanges();
+                _db.SaveChanges();
             }
             else
             {
@@ -73,15 +76,12 @@ namespace WebApplication3.Controllers
                         Position = mod.Position[i],
                         DepartmentId = Convert.ToInt32(d.Id),
                     };
-                    db.Add(us);
+                    _db.Add(us);
                 }
-                db.SaveChanges();
+                _db.SaveChanges();
             }
-
             return RedirectToAction(nameof(Index));
         }
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

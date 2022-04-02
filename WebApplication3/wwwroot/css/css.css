@@ -1,9 +1,9 @@
 ﻿.container {
-    width: 1024px;
+    width: 90%;
     padding: 2em;
 }
 
 .bold-blue {
     font-weight: bold;
-    color: #0277bd;
+    color: #1a719c;
 }
