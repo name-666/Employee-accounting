@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using DB.Models;
+using System.ComponentModel.DataAnnotations;
+
 
 #nullable disable
 
@@ -12,7 +13,7 @@ namespace DB.Models
         {
             Departments = new HashSet<Department>();
         }
-
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
 

@@ -4,27 +4,28 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
     public class HomeController : Controller
     {
-        private MPOContext _db;
+        private readonly MPOContext _db;
 
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger,MPOContext context)
+        public HomeController(ILogger<HomeController> logger, MPOContext context)
         {
             _logger = logger;
             _db = context;
         }
-      [Route("Index")]
-      [HttpGet]
+        [Route("Index")]
+        [HttpGet]
         public IActionResult Index()
         {
 
-          return View();
+            return View();
         }
         [Route("Table")]
         [HttpGet]
@@ -33,35 +34,47 @@ namespace WebApplication3.Controllers
 
             return View(Tuple.Create(_db.Departments.ToList(), _db.Users.ToList()));
         }
-       [Route("Index")]
+
+
+        [Route("Index")]
         [HttpPost]
-        public IActionResult Index(ModelW mod)
+        [ValidateAntiForgeryToken]
+       public async Task <IActionResult> Index(ModelW mod)
         {
+       
             var d = _db.Departments.FirstOrDefault(t => t.Name == mod.DepartmentName);
 
             if (_db.Departments.Where(t => t.Name == mod.DepartmentName).FirstOrDefault() == null)
             {
-                Department dep = new()
+                try
                 {
-                    CompanyId = 1,
-                    Name = mod.DepartmentName,
-                };
-                _db.Add(dep);
-                _db.SaveChanges();
-                for (int i = 0; i < mod.Count(); i++)
-                {
-                    User us = new()
+                    Department dep = new()
                     {
-                        Name = mod.Name[i],
-                        Surname = mod.Surname[i],
-                        Patronymic = mod.Patronymic[i],
-                        WorkingMode = mod.WorkingMode[i],
-                        Position = mod.Position[i],
-                        DepartmentId = Convert.ToInt32(dep.Id),
+                        CompanyId = 1,
+                        Name = mod.DepartmentName,
                     };
-                    _db.Add(us);
+                    _db.Add(dep);
+                    await _db.SaveChangesAsync();
+                    for (int i = 0; i < mod.Count(); i++)
+                    {
+                        User us = new()
+                        {
+                            Name = mod.Name[i],
+                            Surname = mod.Surname[i],
+                            Patronymic = mod.Patronymic[i],
+                            WorkingMode = mod.WorkingMode[i],
+                            Position = mod.Position[i],
+                            DepartmentId = Convert.ToInt32(dep.Id),
+                        };
+                        _db.Add(us);
+                    }
+                    await _db.SaveChangesAsync();
                 }
-                _db.SaveChanges();
+                catch (Exception)
+                {
+
+                    return NotFound();
+                }
             }
             else
             {
@@ -78,9 +91,10 @@ namespace WebApplication3.Controllers
                     };
                     _db.Add(us);
                 }
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            
+            return View(mod);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

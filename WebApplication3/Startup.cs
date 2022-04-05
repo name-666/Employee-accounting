@@ -36,6 +36,7 @@ namespace WebApplication3
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseWelcomePage("/");

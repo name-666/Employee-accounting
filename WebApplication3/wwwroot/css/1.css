@@ -1,0 +1,121 @@
+body {
+  background: #1D1B26;
+}
+.sliding-button {
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  height: 50px;
+  width:100%;
+  position: relative;
+  padding: 15px 30px;
+  font-family: Montserrat-Bold;
+  border-radius: 30px;
+  border-image: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+  border-image-slice: 1;
+  margin: 10px 20px;
+  text-transform: uppercase;
+  overflow: hidden;
+  letter-spacing: 2px;
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+.sliding-button:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 100%;
+  z-index: -1;
+  color: white;
+  background: linear-gradient(180deg, #ff3000, #ed0200, #ff096c, #d50082);
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+.sliding-button:hover {
+  background: rgba(255, 255, 255, 0);
+}
+.sliding-button:hover:before {
+  bottom: 0%;
+  top: auto;
+  height: 100%;
+}
+
+
+
+
+.sliding-button2 {
+  text-decoration: none;
+  color: RED;
+  display: inline-block;
+  height: 50px;
+  width:100%;
+  position: relative;
+  padding: 15px 30px;
+  font-family: Montserrat-Bold;
+  border-radius: 30px;
+  border-image: linear-gradient(180deg, #00fffb, #41b5b3, #ff096c, #8245bf);
+  border-image-slice: 1;
+  margin: 10px 20px;
+  text-transform: uppercase;
+  overflow: hidden;
+  letter-spacing: 2px;
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+.sliding-button2:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 100%;
+  z-index: -1;
+  color: white;
+  background: linear-gradient(180deg, #00fffb, #41b5b3, #ff096c, #8245bf);
+  transition: .8s cubic-bezier(.165, .84, .44, 1);
+}
+.sliding-button2:hover {
+  background: rgba(255, 255, 255, 0);
+}
+.sliding-button2:hover:before {
+  bottom: 0%;
+  top: auto;
+  height: 100%;
+}
+
+
+
+
+
+.focus {
+  display: block;
+  position: absolute;
+  border-radius: 10px;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 0px 0px 0px;
+  color: rgba(255, 0, 143, 1);
+}
+
+.form-control:focus + .focus {
+  -webkit-animation: anim-shadow 0.5s ease-in-out forwards;
+  animation: anim-shadow 0.5s ease-in-out forwards;
+}
+
+
+
+.form-control {
+  font-family: Montserrat-Bold;
+  font-size: 14px;
+  color: #333333;
+  display: block;
+  width: 113%;
+  background: #fff;
+  height: 35px;
+  margin: 5px;
+  border-radius: 30px;
+  border: 2px solid rgba(0,0,0,.15);
+ 
+}
